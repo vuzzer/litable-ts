@@ -1,0 +1,41 @@
+.card{
+    border: 1px solid #713ABE;
+    margin: 1rem 0;
+    width: 350px;
+    margin: 15px auto;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.cardImage{
+    height: 200px;
+    width: 200px;
+}
+
+.img{
+    height: 100%;
+    width: 100%;
+}
+
+.ul{
+    padding-left: 0;
+    list-style-type: none;
+    display: inline-block;
+}
+
+.ul li{
+    text-align: left;
+}
+
+.ul span {
+    font-weight: bold;
+}
+
+
+.cardBody{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+}

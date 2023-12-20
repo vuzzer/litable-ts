@@ -1,0 +1,13 @@
+.linkGroup{
+    margin: auto 0;
+    margin-right: 30px;
+}
+
+.link {
+    color: white;
+    margin: 0 0.5rem;
+}
+
+.link:hover{
+    color: #001524;
+}
