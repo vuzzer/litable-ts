@@ -2,10 +2,9 @@ import './App.css'
 import "./src/presentation/styles/pages/common.css"
 import Header from './src/presentation/components/Header'
 import { Route, Routes } from 'react-router-dom'
-import { home, newLitable, updateOneLitable } from './src/core/route'
-import LitablePage from './src/presentation/pages/LitablePage'
-import AddLitablePage from './src/presentation/pages/AddLitablePage'
-import UpdateLitablePage from './src/presentation/pages/UpdateLitablePage'
+import { home, newLitable, register, updateOneLitable } from './src/core/route'
+import {LitablePage, AddLitablePage, UpdateLitablePage, RegisterPage} from "./src/presentation/pages/index"
+
 
 function App() {
 
@@ -16,6 +15,7 @@ function App() {
           <Route  path={home} element={ <LitablePage/>} />
           <Route  path={newLitable} element={<AddLitablePage/>} />
           <Route  path={updateOneLitable} element={<UpdateLitablePage/>} />
+          <Route path={register} element={<RegisterPage/>} />
         </Routes>
     </>
   )
