@@ -1,3 +1,4 @@
+import { registerWithFacebookAccount, registerWithGoogleAccount } from "../../data/firebaseAuth"
 import styled from "../styles/pages/register.module.css"
 
 export const RegisterPage = () => {
@@ -8,10 +9,10 @@ export const RegisterPage = () => {
             <h2>Create your account</h2>
             <form action="" className={styled.form}>
                 <div className={styled.div} >
-                    <button className={`btn btn-light border ${styled.button}`} >Continue with Google</button>
+                    <a className={`btn btn-light border ${styled.button}`} onClick={registerWithGoogleAccount} >Continue with Google</a>
                 </div>
                <div className={styled.div}>
-                    <button className={`btn btn-light border ${styled.button}` }>Continue with Github</button>
+                    <a className={`btn btn-light border ${styled.button}`}  onClick={registerWithFacebookAccount} >Continue with Facebook</a>
                </div>
                <div className={styled.div}>
                  <span>OR</span>
