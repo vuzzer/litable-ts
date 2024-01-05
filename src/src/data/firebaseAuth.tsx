@@ -1,5 +1,7 @@
 import { GoogleAuthProvider, getAuth, getRedirectResult, signInWithRedirect, signOut, FacebookAuthProvider } from "firebase/auth";
 import { app } from "../core/firebaseConfig"
+import { User } from "../domain/entities/users";
+import { UserCollection } from "../core/databases/userCollection";
 
 
 export const registerWithGoogleAccount = async () => {
@@ -9,7 +11,11 @@ export const registerWithGoogleAccount = async () => {
     provider.addScope('profile');
     provider.addScope('email');
 
-    await signInUserWithProvider(provider);
+    // Log in an Google Account
+    const user = await signInUserWithProvider(provider);
+
+    // Insert in firestore
+    await UserCollection.insert(user);
 }
 
 
@@ -20,8 +26,11 @@ export const registerWithFacebookAccount = async () => {
     // Add Scope 
     provider.addScope('user_birthday');
 
-    await signInUserWithProvider(provider);
+    // Log in an Google Account
+    const user = await signInUserWithProvider(provider);
 
+    // Insert in firestore
+    await UserCollection.insert(user);
 }
 
 export const logout = async () => {
@@ -51,8 +60,8 @@ async function  signInUserWithProvider<T extends TypeAuthProvider > (provider: T
 
     if (result) {
         // signed-in user
-        console.log(result.user);
-        return result.user;
+        let user = new User(result.user.email as string, result.user.displayName as string, result.user.uid)
+        return user;
     }
 
     // Trigger Exception

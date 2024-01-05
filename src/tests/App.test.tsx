@@ -6,12 +6,7 @@ import { newLitable } from "../src/core/route"
 import LitablePage from "../src/presentation/pages/LitablePage"
 
 
-
-
-
 describe("App page routing with no response API", ()=>{
-
-
     it('Should call route home:/ and display LitablePage showing a msg indicating data loading', async () => { 
         //ARRANGE
         render(<App/>, {wrapper: BrowserRouter} )

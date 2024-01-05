@@ -1,24 +1,29 @@
-class User{
+export class User{
+    _id: string;
     _email:string;
     _username:string;
 
     // Constructor
-    constructor(email: string, username:string){
+    constructor(email: string, username:string, id: string){
         this._email = email;
         this._username = username;
+        this._id = id;
     }
 
-    static fromJson(json: DSUser): User{
-        return new User(json.email, json.username);
+    // Return Object User
+    static fromJson(json: JsonUser): User{
+        return new User(json.email, json.username, json.id );
     }
 
-    toJson():DSUser{
-        return {email: this._email, username: this._username};
+    // Transform User data into json
+    toJson():JsonUser{
+        return {email: this._email, username: this._username, id: this._id};
     }
 }
 
 // DsUser : DataStructureUser
-interface DSUser {
+interface JsonUser {
+    id: string,
     email: string,
     username: string
 }
