@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 import styles from '../styles/components/header.module.css'
-import { login, newLitable, register } from "../../core/route"
+import { home, login, newLitable, register } from "../../core/route"
+import { logout } from "../../data/firebaseAuth"
 
 const Nav = styled.nav `
     position: fixed;
@@ -29,6 +30,7 @@ const HeaderComponent = () => {
                 <div className={styles.linkGroup}>
                     <Link to={login} className={styles.link}>Se Connecter</Link>
                     <Link to={register} className={styles.link}>S'inscrire</Link>
+                    <Link to={home} onClick={logout} className={styles.link}>Se dconnecter</Link>
                     <Link to={newLitable} className={styles.link}>Nouvelle Litable</Link>
                 </div>
             </Nav>

@@ -1,4 +1,4 @@
-export class User{
+export class Client{
     _id: string;
     _email:string;
     _username:string;
@@ -11,8 +11,8 @@ export class User{
     }
 
     // Return Object User
-    static fromJson(json: JsonUser): User{
-        return new User(json.email, json.username, json.id );
+    static fromJson(json: JsonUser): Client{
+        return new Client(json.email, json.username, json.id );
     }
 
     // Transform User data into json
