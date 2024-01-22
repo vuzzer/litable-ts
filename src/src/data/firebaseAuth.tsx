@@ -1,7 +1,6 @@
 import { GoogleAuthProvider, getRedirectResult, signInWithRedirect, FacebookAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../core/firebaseConfig"
-import { saveClient } from "../apps/thunks/save-client";
-import { useAppDispatch } from "../apps/hooks/hook";
+import { registerClientData } from "./clientData";
 
 // Use language of browser
 auth.useDeviceLanguage()
@@ -50,7 +49,9 @@ async function signInUserWithProvider<T extends TypeAuthProvider>(provider: T) {
         
     }
 
-    if (result) {
+    if (result?.user) {
+        let user = result.user
+        await registerClientData({uid: user.uid, email: user.email as String, username: user.displayName as String});
         // signed-in user
         return;
     }

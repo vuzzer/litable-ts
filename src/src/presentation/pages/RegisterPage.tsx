@@ -1,29 +1,30 @@
 import {  registerWithFacebookAccount, registerWithGoogleAccount } from "../../data/firebaseAuth"
 import styled from "../styles/pages/register.module.css"
+import {  useAppSelector } from "../../apps/hooks/hook";
 import { auth } from "../../core/firebaseConfig";
-import { saveClient } from "../../apps/thunks/save-client";
-import { useAppDispatch, useAppSelector } from "../../apps/hooks/hook";
-import { onAuthStateChanged } from "firebase/auth";
+import {useAuthState} from "react-firebase-hooks/auth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { home } from "../../core/route";
+
 
 
 export const RegisterPage = () => {
     //const [user, setUser] = useState();
-    const dispatch = useAppDispatch();
+    //const dispatch = useAppDispatch();
+    const [user, loading] = useAuthState(auth)
+    const navigator = useNavigate();
     const { status} = useAppSelector((state) => state.client)
 
+    useEffect(()=>{
+        if(loading){
+            return;
+        }
+        if(user) navigator(home)
+    }, [user, loading])
 
     const register = async() => {
-        let count = 0;
         await registerWithGoogleAccount()
-        auth.authStateReady().then(()=>{})
-        onAuthStateChanged(auth, (user)=>{
-            auth.authStateReady
-            if(user){
-                console.log(count++)
-                // Call dispatch to save new user
-                dispatch(saveClient({uid: user.uid, email: user.email as String, username: user.displayName as String}));
-            }
-        });
     }
     
     return(
@@ -33,10 +34,10 @@ export const RegisterPage = () => {
             <h2>Create your account</h2>
             <form action="" className={styled.form}>
                 <div className={styled.div} >
-                    <a className={`btn btn-light border ${styled.button}`} onClick={() => register() }  >Continue with Google</a>
+                    <a className={`btn btn-light border ${styled.button}`} onClick={register }  >Continue with Google</a>
                 </div>
                <div className={styled.div}>
-                    <a className={`btn btn-light border ${styled.button}`}  onClick={() => registerWithFacebookAccount() } >Continue with Facebook</a>
+                    <a className={`btn btn-light border ${styled.button}`}  onClick={registerWithFacebookAccount } >Continue with Facebook</a>
                </div>
                <div className={styled.div}>
                  <span>OR</span>
