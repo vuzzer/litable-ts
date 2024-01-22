@@ -1,8 +1,9 @@
-import { GoogleAuthProvider, getAuth, getRedirectResult, signInWithRedirect, signOut, FacebookAuthProvider } from "firebase/auth";
-import { app } from "../core/firebaseConfig"
-import { User } from "../domain/entities/users";
-import { UserCollection } from "../core/databases/userCollection";
+import { GoogleAuthProvider, getRedirectResult, signInWithRedirect, FacebookAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../core/firebaseConfig"
+import { registerClientData } from "./clientData";
 
+// Use language of browser
+auth.useDeviceLanguage()
 
 export const registerWithGoogleAccount = async () => {
     const provider = new GoogleAuthProvider();
@@ -11,11 +12,7 @@ export const registerWithGoogleAccount = async () => {
     provider.addScope('profile');
     provider.addScope('email');
 
-    // Log in an Google Account
-    const user = await signInUserWithProvider(provider);
-
-    // Insert in firestore
-    await UserCollection.insert(user);
+    signInUserWithProvider(provider);
 }
 
 
@@ -27,43 +24,37 @@ export const registerWithFacebookAccount = async () => {
     provider.addScope('user_birthday');
 
     // Log in an Google Account
-    const user = await signInUserWithProvider(provider);
+    signInUserWithProvider(provider);
 
-    // Insert in firestore
-    await UserCollection.insert(user);
 }
 
 export const logout = async () => {
-    // Initialize Firebase Authentication and get a reference to the service
-    const auth = getAuth(app)
-    // Use language of browser
-    auth.useDeviceLanguage()
-
     // Log out
-    await signOut(auth)
+    await auth.signOut()
 }
 
 // Type provider of signing-in
 type TypeAuthProvider = GoogleAuthProvider | FacebookAuthProvider;
 
-async function  signInUserWithProvider<T extends TypeAuthProvider > (provider: T){
-    // Initialize Firebase Authentication and get a reference to the service
-    const auth = getAuth(app)
-    // Use language of browser
-    auth.useDeviceLanguage()
-
+async function signInUserWithProvider<T extends TypeAuthProvider>(provider: T) {
+    let result;
     // Trigger a full-page redirect from my app
-    await signInWithRedirect(auth, provider)
-
-    // Get result of redirect
-    const result = await getRedirectResult(auth)
-
-    if (result) {
-        // signed-in user
-        let user = new User(result.user.email as string, result.user.displayName as string, result.user.uid)
-        return user;
+    if (window.innerWidth <= 768) {
+        await signInWithRedirect(auth, provider)
+        // Get result of redirect
+        result = await getRedirectResult(auth)
+    }
+    else {
+        result = await signInWithPopup(auth, provider);
+        
     }
 
+    if (result?.user) {
+        let user = result.user
+        await registerClientData({uid: user.uid, email: user.email as String, username: user.displayName as String});
+        // signed-in user
+        return;
+    }
     // Trigger Exception
-    throw Error();
+    throw Error("Une erreur s'est produite lors de la connexion");
 }
